@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Pitch Predictor</title>
+  <meta name="description" content="Get an instant, brutal Shark Tank-style evaluation for your startup pitch.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ═══════════ MAIN INPUT SCREEN ═══════════ -->
+  <div id="screen-input" class="screen active">
+    
+    <div class="background-grid"></div>
+
+    <header class="hero-header">
+      <div class="stats-ticker">
+        <span>💰 $<span id="statMoney">2.4B</span> VC Deals Evaluated</span>
+        <span>🦈 <span id="statSharks">1,402</span> Sharks Satisfied</span>
+        <span>📊 <span id="statPitches">8,934</span> Pitches Destroyed</span>
+      </div>
+      <h1 class="hero-title">PITCH PREDICTOR</h1>
+      <p class="hero-subtitle">Paste your startup pitch. Get a brutal verdict in 5 seconds.</p>
+    </header>
+
+    <div class="input-container">
+      <label class="section-label">YOUR PITCH</label>
+      <textarea id="pitchTextarea" placeholder="We are [Company]. We solve [problem] for [market]. Our solution is [solution]. We've achieved [traction]. We're raising $[amount] for [equity]%." oninput="updateWordCount()"></textarea>
+      <div class="word-count" id="wordCountCounter">0 words — Optimal: 150-300</div>
+
+      <div class="selector-grid">
+        <div>
+          <label class="section-label">INDUSTRY</label>
+          <div class="chip-group" id="industryChips">
+            <button class="chip active" onclick="selectChip(this, 'industry')">FinTech</button>
+            <button class="chip" onclick="selectChip(this, 'industry')">HealthTech</button>
+            <button class="chip" onclick="selectChip(this, 'industry')">SaaS</button>
+            <button class="chip" onclick="selectChip(this, 'industry')">Consumer</button>
+            <button class="chip" onclick="selectChip(this, 'industry')">DeepTech</button>
+            <button class="chip" onclick="selectChip(this, 'industry')">Other</button>
+          </div>
+        </div>
+        <div>
+          <label class="section-label">STAGE</label>
+          <div class="chip-group" id="stageChips">
+            <button class="chip active" onclick="selectChip(this, 'stage')">Pre-Seed</button>
+            <button class="chip" onclick="selectChip(this, 'stage')">Seed</button>
+            <button class="chip" onclick="selectChip(this, 'stage')">Series A</button>
+            <button class="chip" onclick="selectChip(this, 'stage')">Growth</button>
+          </div>
+        </div>
+      </div>
+
+      <button id="btnSubmitPitch" class="btn btn-primary" onclick="submitPitch()">🦈 PITCH TO THE SHARKS</button>
+    </div>
+
+    <!-- History -->
+    <div class="history-section">
+      <label class="section-label">RECENT PITCHES</label>
+      <div id="historyList" class="history-list"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ LOADING SCREEN ═══════════ -->
+  <div id="screen-loading" class="screen loading-screen">
+    <div class="shark-loader">
+      <div class="shark-fin"></div>
+    </div>
+    <div class="loading-text">The sharks are circling...</div>
+    <div class="loading-bar"><div id="loadingProgress" class="loading-fill"></div></div>
+  </div>
+
+  <!-- ═══════════ RESULTS DASHBOARD ═══════════ -->
+  <div id="screen-result" class="screen">
+    
+    <button class="btn btn-secondary back-btn" onclick="resetApp()">← NEW PITCH</button>
+    <button class="btn-icon audio-toggle" id="audioToggle" onclick="toggleAudio()" title="Toggle Sound">🔊</button>
+
+    <div class="dashboard-grid">
+      
+      <!-- Top Row -->
+      <div class="gauge-card">
+        <label class="section-label">FUNDING PROBABILITY</label>
+        <div class="gauge-container">
+          <svg viewBox="0 0 100 50" class="gauge-svg">
+            <path class="gauge-bg" d="M 10,50 A 40,40 0 0,1 90,50" fill="none" stroke-width="10"/>
+            <path id="gaugeValuePath" class="gauge-value" d="M 10,50 A 40,40 0 0,1 90,50" fill="none" stroke-width="10" stroke-dasharray="125.6" stroke-dashoffset="125.6"/>
+          </svg>
+          <div class="gauge-percentage"><span id="probValue">0</span>%</div>
+        </div>
+        
+        <div id="verdictStamp" class="verdict-stamp">PASS ❌</div>
+        <div id="tagline" class="tagline">"A solution looking for a problem."</div>
+      </div>
+
+      <div class="sharks-card">
+        <label class="section-label">THE PANEL'S VERDICT</label>
+        <div class="sharks-list" id="sharksContainer">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Bottom Row -->
+      <div class="analysis-card strengths">
+        <label class="section-label text-green">💪 STRENGTHS</label>
+        <ul id="strengthsList"></ul>
+      </div>
+
+      <div class="analysis-card flaws">
+        <label class="section-label text-red">💀 FATAL FLAWS</label>
+        <ul id="flawsList"></ul>
+      </div>
+
+      <div class="fixes-card">
+        <label class="section-label" style="color: #451a03">QUICK FIXES (DO THIS BEFORE YOU REPITCH)</label>
+        <ol id="fixesList" class="fixes-list"></ol>
+        
+        <div style="margin-top: 2rem;">
+          <label class="section-label" style="color: #451a03">INVESTOR MATCH</label>
+          <div class="investor-pills" id="investorMatchList"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
